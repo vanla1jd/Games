@@ -1,0 +1,42 @@
+- Change "Earn Gold" to "Jobs" (Done)
+	- Define and list Job XP
+	- Job refinement meaning to hide other jobs 
+		- Explain this to the player so they dont make a bad choice.
+	- Add Job spec and Job spec xp to the home screen
+
+- Remove Start Game Stats Screen (Done)
+	- Replace with Backstory / Lore
+
+
+- Jobs
+	- Create time stat. (Done)
+	- Assign time stat to various jobs.
+	- Certain Jobs unavailable at certain times. (Done)
+	- Used only as a way to earn money.
+
+- Time (Done)
+	- Assign time to the home screen title. (Done)
+	- Quests appearing at certain times in the day.
+	- Quests only available once you have reached a certain level.
+
+- Quests
+	- Create quest text.
+	- Create quest option on home screen
+	- Signify that the quest is available/unavailable.
+	- Randomize a number of quests.
+
+- Battle System
+	- Make damage, health, and armor mean something.
+
+- Shop
+	- Something other than training to spend your money on. 
+	- Armor, Weapons, Accessories
+	- Create "View Inventory" on home screen.
+
+- Rest
+	- Rest now increases time properly
+	- Rest now gives an option to move the clock forward.
+	- Rest should charge based on number of hours slept.
+	- Rest should give health based on time slept.
+- Level Up Screen
+	- Leveling now 
