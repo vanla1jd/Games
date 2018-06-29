@@ -11,13 +11,9 @@ echo 3. Exit
 echo.
 choice /c 123 /n /m ""
 
-if %errorlevel% equ 1 goto newgame
+if %errorlevel% equ 1 goto begin
 if %errorlevel% equ 2 goto loadgame
 if %errorlevel% equ 3 exit
-
-
-:newgame
-goto begin
 
 :loadgame
 echo Choose a Save Slot to load from.
@@ -33,9 +29,11 @@ goto loadslot-%errorlevel%
   set /p gold=
   set /p playerdamage=
   set /p playerarmor=
-  set /p playerxp=
+  set /p currentxp=
   set /p levelxp=
   set /p playerlevel=
+  set /p day=
+  set /p time=
 )
 goto home
 
@@ -47,9 +45,11 @@ goto home
   set /p gold=
   set /p playerdamage=
   set /p playerarmor=
-  set /p playerxp=
+  set /p currentxp=
   set /p levelxp=
   set /p playerlevel=
+  set /p day=
+  set /p time=
 )
 goto home
 
@@ -61,9 +61,11 @@ set /p username=
   set /p gold=
   set /p playerdamage=
   set /p playerarmor=
-  set /p playerxp=
+  set /p currentxp=
   set /p levelxp=
   set /p playerlevel=
+  set /p day=
+  set /p time=
 )
 goto home
 
@@ -75,9 +77,11 @@ set /p username=
   set /p gold=
   set /p playerdamage=
   set /p playerarmor=
-  set /p playerxp=
+  set /p currentxp=
   set /p levelxp=
   set /p playerlevel=
+  set /p day=
+  set /p time=
 )
 goto home
 
@@ -89,9 +93,11 @@ set /p username=
   set /p gold=
   set /p playerdamage=
   set /p playerarmor=
-  set /p playerxp=
+  set /p currentxp=
   set /p levelxp=
   set /p playerlevel=
+  set /p day=
+  set /p time=
 )
 goto home
 
@@ -103,9 +109,11 @@ set /p username=
   set /p gold=
   set /p playerdamage=
   set /p playerarmor=
-  set /p playerxp=
+  set /p currentxp=
   set /p levelxp=
   set /p playerlevel=
+  set /p day=
+  set /p time=
 )
 goto home
 
@@ -117,9 +125,11 @@ set /p username=
   set /p gold=
   set /p playerdamage=
   set /p playerarmor=
-  set /p playerxp=
+  set /p currentxp=
   set /p levelxp=
   set /p playerlevel=
+  set /p day=
+  set /p time=
 )
 goto home
 
@@ -131,9 +141,11 @@ set /p username=
   set /p gold=
   set /p playerdamage=
   set /p playerarmor=
-  set /p playerxp=
+  set /p currentxp=
   set /p levelxp=
   set /p playerlevel=
+  set /p day=
+  set /p time=
 )
 goto home
 
@@ -142,16 +154,7 @@ Exit
 
 :begin
 cls
-set playerhealth=100
-set playermaxhealth=100
-set gold=100
-set playerdamage=1
-set playerarmor=10
-set playerxp=0
-set levelxp=100
-set playerlevel=1
-set day=01
-set time=9
+call "%~dp0\properties.bat"
 goto naming
 
 :naming
@@ -165,21 +168,29 @@ goto lorewindow
 
 :lorewindow
 cls
-title An Adventure Game
-echo Hello %username% and welcome to Ardania!
+title Your Story - An Ardanian Adventure
+echo 				Hello %username% and Welcome to Ardania!
 echo.
 echo.
-echo The beginning of the story will take place on this screen. It will provide background
-echo to the adventure and then will require you to hit a key to begin.
 echo.
-echo To begin your adventure, strike a key.
+echo.
+echo.
+echo  This is your story. The story of how one lowly citizen of Ardania can sit upon the throne of the gods.
+echo     It is up to you to forge your path to glory, either with good intentions or dasterdly tactics.
+echo    The choice is yours. But for now... you are just a lowly peasant. Go show them what you are worth.
+echo.
+echo.
+echo.
+echo.
+echo.
+echo 				To begin your adventure, strike a key.
 pause >nul
 goto home
 
 :home
 cls
 title An Adventure Game
-if %playerxp% geq %levelxp% goto levelup
+if %currentxp% geq %levelxp% goto levelup
 if %time% geq 18 (
 	 goto homenight
 	) else (
@@ -188,19 +199,20 @@ if %time% geq 18 (
 		)
 	)
 )
+set /a questvar=%random% %%100 +1
 echo %username%'s Current Status (Day: %day% Time: %time%:00)
 echo --------------------------------------------------------
 echo.
+echo Level    = %playerlevel%		Highest Job Xp	=	
 echo Health   = %playerhealth%/%playermaxhealth%
 echo Wealth   = %gold%
-echo Level    = %playerlevel%
-echo XP       = %playerxp%/%levelxp%
+echo XP       = %currentxp%/%levelxp%
 echo Weapon   = Wooden Dagger (%playerdamage% Damage) 
 echo Armor    = Cotton Robe   (%playerarmor% AC)
 echo.
 echo.
 echo.
-echo You begin your journey here. 
+if %day% equ 1 echo You begin your journey here. 
 echo.
 echo Choose from the following:
 echo 1) Training Hall
@@ -210,14 +222,18 @@ echo 4) Save Game
 echo 5) Exit
 echo.
 echo.
+if %questvar% leq 20 echo A quest has been declared! Press Q to view.
 echo.
-choice /c 12345 /n /m "Choose:"
+echo.
+echo.
+choice /c 12345q /n /m "Choose:"
 
 if %errorlevel% equ 1 goto Traininghall
 if %errorlevel% equ 2 goto jobs
 if %errorlevel% equ 3 goto rest
 if %errorlevel% equ 4 goto savegame
 if %errorlevel% equ 5 goto savewarn
+if %errorlevel% equ 6 goto quest
 
 
 :homenight
@@ -228,13 +244,12 @@ echo.
 echo Level    = %playerlevel%
 echo Health   = %playerhealth%/%playermaxhealth%
 echo Wealth   = %gold%
-echo XP       = %playerxp%/%levelxp%
+echo XP       = %currentxp%/%levelxp%
 echo Weapon   = Wooden Dagger (%playerdamage% Damage) 
 echo Armor    = Cotton Robe   (%playerarmor% AC)
 echo.
 echo.
-echo.
-echo You begin your journey here. 
+echo. 
 echo.
 echo Choose from the following:
 echo 1) Jobs
@@ -256,7 +271,7 @@ call "%~dp0\areas\traininghall.bat"
 goto home
 
 :Jobs
-call "%~dp0\areas\traininghall.bat"
+call "%~dp0\areas\Jobs.bat"
 goto home
 
 
@@ -293,10 +308,12 @@ goto saveslot-%errorlevel%
   echo %gold%
   echo %playerdamage%
   echo %playerarmor%
-  echo %playerxp%
+  echo %currentxp%
   echo %levelxp%
   echo %playerlevel%
-) > savegame1.sav
+  echo %day%
+  echo %time%
+) > savegame4.sav
 echo Save Successful!
 echo.
 echo Do you wish to stop playing?
@@ -311,9 +328,11 @@ goto optionsave-%errorlevel%
   echo %gold%
   echo %playerdamage%
   echo %playerarmor%
-  echo %playerxp%
+  echo %currentxp%
   echo %levelxp%
   echo %playerlevel%
+  echo %day%
+  echo %time%
 ) > savegame2.sav
 echo Save Successful!
 echo.
@@ -329,9 +348,11 @@ goto optionsave-%errorlevel%
   echo %gold%
   echo %playerdamage%
   echo %playerarmor%
-  echo %playerxp%
+  echo %currentxp%
   echo %levelxp%
   echo %playerlevel%
+  echo %day%
+  echo %time%
 ) > savegame3.sav
 echo Save Successful!
 echo.
@@ -347,9 +368,11 @@ goto optionsave-%errorlevel%
   echo %gold%
   echo %playerdamage%
   echo %playerarmor%
-  echo %playerxp%
+  echo %currentxp%
   echo %levelxp%
   echo %playerlevel%
+  echo %day%
+  echo %time%
 ) > savegame4.sav
 echo Save Successful!
 echo.
@@ -365,9 +388,11 @@ goto optionsave-%errorlevel%
   echo %gold%
   echo %playerdamage%
   echo %playerarmor%
-  echo %playerxp%
+  echo %currentxp%
   echo %levelxp%
   echo %playerlevel%
+  echo %day%
+  echo %time%
 ) > savegame5.sav
 echo Save Successful!
 echo.
@@ -383,9 +408,11 @@ goto optionsave-%errorlevel%
   echo %gold%
   echo %playerdamage%
   echo %playerarmor%
-  echo %playerxp%
+  echo %currentxp%
   echo %levelxp%
   echo %playerlevel%
+  echo %day%
+  echo %time%
 ) > savegame6.sav
 echo Save Successful!
 echo.
@@ -401,9 +428,11 @@ goto optionsave-%errorlevel%
   echo %gold%
   echo %playerdamage%
   echo %playerarmor%
-  echo %playerxp%
+  echo %currentxp%
   echo %levelxp%
   echo %playerlevel%
+  echo %day%
+  echo %time%
 ) > savegame7.sav
 echo Save Successful!
 echo.
@@ -419,9 +448,11 @@ goto optionsave-%errorlevel%
   echo %gold%
   echo %playerdamage%
   echo %playerarmor%
-  echo %playerxp%
+  echo %currentxp%
   echo %levelxp%
   echo %playerlevel%
+  echo %day%
+  echo %time%
 ) > savegame8.sav
 echo Save Successful!
 echo.
@@ -436,16 +467,15 @@ exit
 goto home
 
 :savewarn
-echo Exit without saving?
-choice /c yn /n /m "Quit?"
+choice /c yn /n /m "Exit without saving?"
 
-if %errorlevel% equ 1 exit
+if %errorlevel% equ 1 goto startup
 if %errorlevel% equ 2 goto home
 
 :levelup
 cls
 set /a playerlevel=%playerlevel%+1
-set /a playerxp=%playerxp%-%levelxp%
+set /a currentxp=%currentxp%-%levelxp%
 set /a levelxp=%levelxp%+50
 echo You are now level %playerlevel%!
 echo.
@@ -454,7 +484,9 @@ echo New quests, jobs, and soldiers await you in Ardania!
 pause >nul
 goto home
 
-
+:quest
+call "%~dp0\areas\quests.bat"
+goto home
 
 :optionh-5 Exit
 exit

@@ -2,22 +2,24 @@
 
 :Traininghall
 cls
-title Ardanian Training Hall
+title Ardanian Training Hall - An Ardanian Adventure
 echo                                     ### The Ardanian Training Hall ###
 echo.
 echo                      Here you can challenge soldiers to gain experience and grow stronger.
 echo   Each time you challenge a soldier, the Ardanian guards will charge you a small fee for using the battle arena.
 echo.
+echo                                          Open From: 6:00 - 18:00
+echo.
 echo.
 echo                            Current Stats
 echo ------------------------------------------------------------------------
-echo 	  Gold: %gold%	  Level: %playerlevel%	  Experience: %playerxp%/%levelxp% 
+echo 	  Gold: %gold%	  Level: %playerlevel%	  Experience: %currentxp%/%levelxp% 
 echo.
 echo.
-if %playerxp% geq 100 ( 
+if %playerlevel% equ 2 ( 
  goto traininglevel2
 )
-if %playerxp% leq 99 ( 
+if %playerlevel% equ 1 ( 
  goto traininglevel1
 )
 goto training
@@ -166,7 +168,8 @@ if %time% geq 24 (
 	set /a day=%day%+1
 )
 set /a gold=%gold%-%cost%
-set /a playerxp=%playerxp%+%trainxp%
+set /a currentxp=%currentxp%+%trainxp%
+set /a totalxp=%totalxp%+%trainxp%
 echo You trained with %trainmob%.
 echo.
 echo You earned %trainxp% experience points!
